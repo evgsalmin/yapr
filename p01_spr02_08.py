@@ -1,60 +1,58 @@
 import datetime as dt
 
-
 date_format = '%d.%m.%Y'
 
 
 class Record:
-    def __init__(self, amount:float, comment:str, date):
-        self.amount=amount
-        self.comment=comment
-        self.date=date
+    def __init__(self, amount: float, comment: str, date):
+        self.amount = amount
+        self.comment = comment
+        self.date = date
 
 
 class Calculator:
     def __init__(self, limit: int):
         self.limit = limit
-        self.records=[]
+        self.records: list[Record] = []
 
     def add_record(self, record: Record):
         self.records.append(record)
 
     def get_today_stats(self):
-        today_stats=0
-        now=dt.datetime.now()
-        today=now.date()
+        today_stats = 0
+        now = dt.datetime.now()
+        today = now.date()
         for record in self.records:
             moment = dt.datetime.strptime(record.date, date_format)
             day = moment.date()
-            if day==today:
-                today_stats+=record.amount
+            if day == today:
+                today_stats += record.amount
         print(f'сегодня {today} потрачено {today_stats}')
-        return(today_stats)
-        
+        return (today_stats)
+
     def get_week_stats(self):
-        week_stats=0
-        now=dt.datetime.now()
-        today=now.date()
-        delta=dt.timedelta(7)
-        week_ago=today-delta
+        week_stats = 0
+        now = dt.datetime.now()
+        today = now.date()
+        delta = dt.timedelta(7)
+        week_ago = today-delta
         for record in self.records:
             moment = dt.datetime.strptime(record.date, date_format)
             day = moment.date()
-            if (day<=today) & (day>=week_ago):
-                week_stats+=record.amount
+            if (day <= today) & (day >= week_ago):
+                week_stats += record.amount
         print(f'за неделю {week_ago} - {today} потрачено {week_stats}')
 
 
 class CashCalculator(Calculator):
     def get_today_cash_remained(self):
-        remained=self.limit-self.get_today_stats()
+        remained = self.limit-self.get_today_stats()
         print(f'сегодня осталось {remained} денег')
-
 
 
 class CaloriesCalculator(Calculator):
     def get_today_calories_remained(self):
-        remained=self.limit-self.get_today_stats()
+        remained = self.limit-self.get_today_stats()
         print(f'сегодня еще можно съесть {remained} еды')
 
 
